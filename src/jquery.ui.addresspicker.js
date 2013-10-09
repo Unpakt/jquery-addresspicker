@@ -5,8 +5,6 @@
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * http://jquery.org/license
 *
-* http://docs.jquery.com/UI/Progressbar
-*
 * Depends:
 * jquery.ui.core.js
 * jquery.ui.widget.js
@@ -22,6 +20,7 @@
         componentsFilter:'',
         updateCallback: null,
         reverseGeocode: false,
+        maxResponses: null,
         mapOptions: {
             zoom: 5,
             center: new google.maps.LatLng(46, 2),
@@ -191,11 +190,12 @@
         	}, 
 	        function(results, status) 
 	        {
-	          if (status == google.maps.GeocoderStatus.OK) {
-	              for (var i = 0; i < results.length; i++) {
-	                  results[i].label = results[i].formatted_address;
-	              };
-	          }
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (self.options.maxResponses) results = results.slice(0, self.options.maxResponses); 
+              for (var i = 0; i < results.length; i++) {
+                results[i].label = results[i].formatted_address;
+              };
+            }
 	          response(results);
 	        });
     },
